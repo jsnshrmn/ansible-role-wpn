@@ -1,0 +1,10 @@
+---
+- include: yum.yml
+  become: true
+
+- include: configure.yml
+  become: true
+
+- include: assets.yml
+  become: true
+  tags: assets

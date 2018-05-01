@@ -1,0 +1,18 @@
+# Path for wpn scripts
+PATH=/opt/wpn/bin:/opt/php/bin:/usr/local/bin:/usr/bin:/bin:/sbin:$PATH
+
+# tag for wpn boxes
+env_name="{{ wpn_environment_name }}"
+
+{% if ((wpn_s3_snapshot_base_dir is defined) and (wpn_s3_snapshot_base_dir is not none)) %}
+# Directory for S3 snapshots
+wpn_s3_snapshot_dir="{{ wpn_s3_snapshot_base_dir }}$(/opt/oulib/aws/bin/ec2_get_arn.sh)"
+{% endif %}
+
+# Public facing host name
+wpn_host_suffix="{{httpd_dn_suffix}}"
+
+# Default MySQL target
+wpn_dbhost="{{ mariadb_host }}"
+wpn_dbport="{{ mariadb_port }}"
+wpn_dbsu="{{ mariadb_root_user}}"

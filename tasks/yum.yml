@@ -1,0 +1,20 @@
+---
+
+- name: Install Red Hat Software Collections
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - centos-release-scl
+
+- name: Install yum packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rh-php71-php
+    - rh-php71-php-fpm
+    - rh-php71-php-mbstring
+    - rh-php71-php-mysqlnd
+    - rh-php71-php-opcache
+    - mariadb

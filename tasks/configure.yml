@@ -1,0 +1,40 @@
+---
+
+- name: make Red Hat PHP7 our PHP of choice
+  alternatives:
+    name: php
+    link: /usr/bin/php
+    path: /opt/rh/rh-php71/root/bin/php
+    priority: 1
+
+- name: Set SELinux exceptions for apache
+  command: "setsebool -P {{ item }} on"
+  with_items:
+    - httpd_can_network_connect
+    - httpd_can_sendmail
+
+- name: Allow apache group to view httpd log files
+  file:
+    path: /var/log/httpd
+    owner: root
+    group: apache
+    mode: 0750
+- name: Add /srv config include to http.conf
+  lineinfile:
+    state: present
+    dest: /etc/httpd/conf/httpd.conf
+    line: "IncludeOptional \"/srv/*/etc/*.conf\""
+
+- name: Ensure /etc/profile.d/wpn-ops.sh exists
+  file:
+    path: /etc/profile.d/wpn-ops.sh
+    state: touch
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Add ops scripts to path
+  lineinfile:
+    state: present
+    dest: /etc/profile.d/wpn-ops.sh
+    line: "export PATH=/opt/wpn/bin:$PATH"

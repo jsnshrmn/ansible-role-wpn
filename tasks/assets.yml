@@ -1,0 +1,59 @@
+---
+- name: Ensure /opt/wpn/bin exists
+  file:
+    path: /opt/wpn/bin
+    state: directory
+    mode: 0655
+    owner: root
+    group: wheel
+    recurse: yes
+
+- name: scripts to /opt/wpn/bin
+  copy:
+    src: "{{ item }}"
+    dest: /opt/wpn/bin/
+    mode: 0755
+    owner: root
+    group: wheel
+  with_items:
+    - wpn_dump.sh
+    - wpn_http.conf
+    - wpn_httpd_conf.sh
+    - wpn_importdb.sh
+    - wpn_init.sh
+    - wpn_perms_fix.sh
+    - wpn_perms.sh
+    - wpn_snapshot.sh
+
+- name: wp cli to /opt/wpn/bin
+  copy:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: /opt/wpn/bin/wp
+    mode: 0755
+    owner: root
+    group: wheel
+
+- name: Ensure /opt/wpn/etc exists
+  file:
+    path: /opt/wpn/etc
+    state: directory
+    mode: 0655
+    owner: root
+    group: wheel
+    recurse: yes
+
+- name: Install httpd template file
+  copy:
+    src: wpn_init_httpd_template
+    dest: /opt/wpn/etc/
+    owner: apache
+    group: wheel
+    mode: 0444
+
+- name: Install wpn config
+  template:
+    src: wpn_conf.sh.j2
+    dest: /opt/wpn/etc/wpn_conf.sh
+    owner: root
+    group: wheel
+    mode: 0444
