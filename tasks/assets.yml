@@ -17,7 +17,6 @@
     group: wheel
   with_items:
     - wpn_dump.sh
-    - wpn_http.conf
     - wpn_httpd_conf.sh
     - wpn_importdb.sh
     - wpn_init.sh
