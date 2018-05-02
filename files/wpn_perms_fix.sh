@@ -20,11 +20,11 @@ sitepath=$1
 echo "Fixing permissions for ${sitepath}."
 
 # Set perms
-wpn_perms.sh "$sitepath/wpn"
+wpn_perms.sh --sticky "$sitepath/wp"
 wpn_perms.sh --sticky "$sitepath/db"
 wpn_perms.sh --sticky "$sitepath/etc"
 
 # Pay specific attention to the file with the passwords 
-sudo -u apache chmod 444 "$sitepath/wpn/wp-config.php"
+sudo -u apache chmod 444 "$sitepath/wp/wp-config.php"
 
 exit 0

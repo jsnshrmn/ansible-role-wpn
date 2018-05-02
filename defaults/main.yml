@@ -11,7 +11,7 @@ mariadb_port: "3306"
 mariadb_root_user: 'root'
 
 # Setting secure path makes sudo work as desired
-users_secure_path: '/opt/php/bin:/opt/wpn/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+users_secure_path: '/opt/wpn/bin:/sbin:/bin:/usr/sbin:/usr/bin'
 
 # Control of PHP session expiration
 wpn_session_cookie_lifetime: "0"
