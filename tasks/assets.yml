@@ -25,7 +25,7 @@
     - wpn_snapshot.sh
 
 - name: wp cli to /opt/wpn/bin
-  copy:
+  get_url:
     url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     dest: /opt/wpn/bin/wp
     mode: 0755
