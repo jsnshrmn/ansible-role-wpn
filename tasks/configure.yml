@@ -1,6 +1,6 @@
 ---
 
-- name: make Red Hat PHP7 our PHP of choice
+- name: Make Red Hat PHP7 our PHP of choice
   alternatives:
     name: php
     link: /usr/bin/php

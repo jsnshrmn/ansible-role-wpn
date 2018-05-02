@@ -1,2 +1,8 @@
 ---
 # handlers file for wpn
+
+- name: Enable Red Hat PHP7-FPM
+  service:
+    name: rh-php71-php-fpm
+    state: restarted
+    enabled: yes
