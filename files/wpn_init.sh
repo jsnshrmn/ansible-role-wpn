@@ -68,16 +68,16 @@ sudo -u apache wp core download --path="${sitepath}/wp" --locale=en_US || exit 1
 sudo -u apache wp config create --path="${sitepath}/wp" --dbhost=${my_dbhost}:${my_dbport} --dbuser=${my_dbsu} --dbpass=${my_dbsu_pass} --dbname=wpn_${site}_${env_name} --locale=en_US || exit 1;
 
 ## Create the database
-mysql -h ${my_dbhost} -P ${my_dbport} -u ${my_dbsu} -p${my_dbsu_pass} -e "create database wpn_${site}_${env_name}; GRANT ALL PRIVILEGES ON wpn_${site}_${env_name}.* TO '${my_dbsu}'@'%' IDENTIFIED BY '${my_dbsu_p
-ass}'" || exit 1;
+echo "Creating empty database."
+mysql -h ${my_dbhost} -P ${my_dbport} -u ${my_dbsu} -p${my_dbsu_pass} -e "create database wpn_${site}_${env_name}; GRANT ALL PRIVILEGES ON wpn_${site}_${env_name}.* TO '${my_dbsu}'@'%' IDENTIFIED BY '${my_dbsu_pass}'" || exit 1;
 
 ## Install wpn core
 sudo -u apache wp core multisite-install  --path="${sitepath}/wp" --url="${site}.${my_host_suffix}${subpath}" --title="${site}" --admin_email=admin@${site}.${my_host_suffix}  --subdomains --skip-email || exit 1;
 
-# Apply our standard permissions to the new site
-wpn_perms_fix.sh "$sitepath"
-
 ## Apply the apache config
 wpn_httpd_conf.sh "$sitepath" || exit 1;
+
+# Apply our standard permissions to the new site
+wpn_perms_fix.sh "$sitepath"
 
 echo "Finished building site at ${sitepath}."

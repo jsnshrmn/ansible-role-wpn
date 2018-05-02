@@ -11,7 +11,7 @@ Usage: wpn_perms.sh [--sticky] \$dir
             
 --sticky    Optional argument adds group write with sticky bit. 
             This is the default behavior for dev environments.  
-\$inputdir      Folder to modify (eg. /srv/example/wpn).
+\$inputdir      Folder to modify (eg. /srv/example/wp).
 USAGE
 
   exit 1;

@@ -33,7 +33,6 @@ dbfile="${sitepath}/db/wpn_${site}_dump.sql"
 sudo -u apache mkdir -p "$sitepath/db"
 
 ## Perform sql-dump
-sudo -u apache drush -r "$sitepath/wpn" sql-dump --result-file="$sitepath/db/wpn_${site}_dump.sql"
 sudo -u apache bash -c "mysqldump -h ${my_dbhost} -P ${my_dbport} -u ${my_dbsu} -p${my_dbsu_pass} wpn_${site}_${env_name} > ${dbfile}" || exit 1;
 
 ## Set perms

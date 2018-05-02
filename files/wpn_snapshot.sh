@@ -41,11 +41,11 @@ if [ -z "${wpn_s3_snapshot_dir}" ]; then
     wpn_perms.sh "$snapshotdir"
 
     # Tar files required to rebuild, with $site as TLD inside tarball. 
-    sudo -u apache tar -czf "$snapshotdir/$site.${wpn_host_suffix}.${dow}.tar.gz" -C /srv/ "${site}/etc" "${site}/db" "${site}/wpn"
+    sudo -u apache tar -czf "$snapshotdir/$site.${wpn_host_suffix}.${dow}.tar.gz" -C /srv/ "${site}/etc" "${site}/db" "${site}/wp"
 # Otherwise use aws s3
 else
     snapshotdir=${wpn_s3_snapshot_dir}
-    sudo -u apache tar -cf - -C /srv/ "${site}/etc" "${site}/db" "${site}/wpn" | gzip --stdout --best | aws s3 cp - "$snapshotdir/$site.${wpn_host_suffix}.$dow.tar.gz" --sse
+    sudo -u apache tar -cf - -C /srv/ "${site}/etc" "${site}/db" "${site}/wp" | gzip --stdout --best | aws s3 cp - "$snapshotdir/$site.${wpn_host_suffix}.$dow.tar.gz" --sse
 fi
 
 echo "Snapshot created at ${snapshotdir}/${site}.${wpn_host_suffix}.${dow}.tar.gz"
