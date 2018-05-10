@@ -43,11 +43,11 @@ fi
 
 ## Load sql-dump to local DB
 echo "Importing database for $site from file at $dbfile."
-sudo -u apache bash -c "mysql -h ${my_dbhost} -P ${my_dbport} -u ${my_dbsu} -p${my_dbsu_pass} -D wpn_${site}_${env_name} < ${dbfile}" || exit 1;
+sudo -u apache bash -c "mysql -h ${wpn_dbhost} -P ${wpn_dbport} -u ${wpn_dbsu} -p${wpn_dbsu_pass} -D wpn_${site}_${env_name} < ${dbfile}" || exit 1;
 
 echo "Database imported."
 
 ## Restored DBs might need updates
-sudo -u apache wp core update --path="${sitepath}" --locale=en_US --minor || exit 1;
-sudo -u apache wp plugin update --path="${sitepath}" --locale=en_US --all --minor || exit 1;
-sudo -u apache wp theme update --path="${sitepath}" --locale=en_US --all --minor || exit 1;
+sudo -u apache wp core update --path="${sitepath}/wp" --locale=en_US --minor || exit 1;
+sudo -u apache wp plugin update --path="${sitepath}/wp" --all --minor || exit 1;
+sudo -u apache wp theme update --path="${sitepath}/wp" --all || exit 1;
