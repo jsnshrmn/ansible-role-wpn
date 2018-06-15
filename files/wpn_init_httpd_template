@@ -6,6 +6,7 @@
   SSLCertificateChainFile ${HTTPD_CERT_PATH}/star.${HTTPD_DN_SUFFIX}/chain.pem
 
   ServerName __wpn_base_dir__.${HTTPD_DN_SUFFIX}
+  ServerAlias *.__wpn_base_dir__.${HTTPD_DN_SUFFIX}
   DocumentRoot /srv/__wpn_base_dir__/wp
   ProxyPassMatch ^/(.*.php)$ fcgi://127.0.0.1:9000/srv/__wpn_base_dir__/wp
 
