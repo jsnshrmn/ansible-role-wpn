@@ -17,6 +17,7 @@
     - rh-php71-php-mbstring
     - rh-php71-php-mysqlnd
     - rh-php71-php-opcache
+    - rh-php71-php-xml
     - mariadb
   notify:
     - Enable Red Hat PHP7-FPM
