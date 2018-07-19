@@ -12,20 +12,6 @@
     group: wheel
     state: directory
 
-- name: Ensure php dir exists
-  file:
-    path: /opt/php
-    owner: composer
-    group: wheel
-    state: directory
-
-- name: Ensure php/bin path exists
-  file:
-    path: /opt/php/bin
-    owner: composer
-    group: wheel
-    state: directory
-
 - name: Download Composer installer
   get_url:
     url: https://getcomposer.org/installer
@@ -38,12 +24,12 @@
   command: >
     php /tmp/downloads/composer-installer.php
   args:
-    chdir: /opt/php/bin
-    creates: /opt/php/bin/composer.phar
+    chdir: /opt/wpn/bin
+    creates: /opt/wpn/bin/composer.phar
 
 - name: Make sure Composer is executable
   file:
-    path: /opt/php/bin/composer.phar
+    path: /opt/wpn/bin/composer.phar
     owner: composer
     group: wheel
     mode: 0775
