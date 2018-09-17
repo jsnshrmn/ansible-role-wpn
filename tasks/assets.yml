@@ -22,6 +22,7 @@
     - wpn_init.sh
     - wpn_perms_fix.sh
     - wpn_perms.sh
+    - wpn_restore.sh
     - wpn_snapshot.sh
 
 - name: wp cli to /opt/wpn/bin
