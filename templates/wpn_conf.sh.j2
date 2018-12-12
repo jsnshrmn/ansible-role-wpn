@@ -4,6 +4,8 @@ PATH=/opt/wpn/bin:/usr/local/bin:/usr/bin:/bin:/sbin:$PATH
 # tag for wpn boxes
 env_name="{{ wpn_environment_name }}"
 
+wpn_version="{{ wpn_version }}"
+
 {% if ((wpn_s3_snapshot_base_dir is defined) and (wpn_s3_snapshot_base_dir is not none)) %}
 # Directory for S3 snapshots
 wpn_s3_snapshot_dir="{{ wpn_s3_snapshot_base_dir }}$(/opt/oulib/aws/bin/ec2_get_arn.sh)"
