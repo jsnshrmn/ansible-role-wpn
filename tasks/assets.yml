@@ -37,9 +37,18 @@
   file:
     path: /opt/wpn/etc
     state: directory
-    mode: 0655
+    mode: 0755
     owner: root
     group: wheel
+    recurse: yes
+
+- name: Ensure /usr/share/httpd/.wp-cli exists
+  file:
+    path: /usr/share/httpd/.wp-cli
+    state: directory
+    mode: 0755
+    owner: apache
+    group: apache
     recurse: yes
 
 - name: Install httpd template file
