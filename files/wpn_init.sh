@@ -62,7 +62,7 @@ sudo -u apache mkdir -p "$sitepath"
 sudo -u apache chmod 775 "$sitepath"
 
 ## Download wpn core
-sudo -u apache wp core download --path="${sitepath}/wp" --locale=en_US || exit 1;
+sudo -u apache wp core download --path="${sitepath}/wp" --locale=en_US --version="${wpn_version}" || exit 1;
 
 ## Create the config file
 sudo -u apache wp config create --path="${sitepath}/wp" --dbhost=${my_dbhost}:${my_dbport} --dbuser=${my_dbsu} --dbpass=${my_dbsu_pass} --dbname=wpn_${site}_${env_name} --locale=en_US || exit 1;
