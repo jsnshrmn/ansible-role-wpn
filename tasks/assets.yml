@@ -25,6 +25,14 @@
     - wpn_restore.sh
     - wpn_snapshot.sh
 
+- name: Install cron script
+  copy:
+    src: wpn_daily.cron
+    dest: /etc/cron.daily/wpn-daily.cron
+    mode: 0755
+    owner: root
+    group: wheel
+
 - name: wp cli to /opt/wpn/bin
   get_url:
     url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
