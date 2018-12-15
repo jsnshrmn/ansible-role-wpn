@@ -45,6 +45,11 @@
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteRule . /index.php [L]
     </IfModule>
+    <ifModule mod_deflate.c>
+        <filesMatch "\.(html?|txt|css|js|php)$">
+          SetOutputFilter DEFLATE
+        </filesMatch>
+    </ifModule>
   </Directory>
 
   <Directory "/srv/__wpn_base_dir__/.well-known/acme-challenge">
