@@ -38,7 +38,9 @@ if [ -z "${wpn_s3_snapshot_dir}" ]; then
 
     # Make sure we have a place to stick snapshots
     sudo -u apache mkdir -p "$snapshotdir"
-    wpn_perms.sh "$snapshotdir"
+
+    # Fix any permissions issues before tying to run backup.
+    /opt/wpn/bin/wpn_perms_fix.sh "$sitepath"
 
     # Tar files required to rebuild, with $site as TLD inside tarball. 
     sudo -u apache tar -czf "$snapshotdir/$site.${wpn_host_suffix}.${dow}.tar.gz" -C /srv/ "${site}/etc" "${site}/db" "${site}/wp"
