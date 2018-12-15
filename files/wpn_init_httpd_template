@@ -1,3 +1,22 @@
+<VirtualHost *:80>
+  ServerName __wpn_base_dir__.${HTTPD_DN_SUFFIX}
+  ServerAlias *.__wpn_base_dir__.${HTTPD_DN_SUFFIX}
+  Alias "/.well-known/acme-challenge" "/srv/__wpn_base_dir__/.well-known/acme-challenge"
+
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteCond %{REQUEST_URI} !^\/\.well-known\/.*$
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+
+ <Directory "/srv/__wpn_base_dir__/.well-known/acme-challenge">
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+    Require all granted
+ </Directory>
+
+</VirtualHost>
+
 <VirtualHost *:443>
 
   Include /etc/httpd/conf.d/00ssl.include
