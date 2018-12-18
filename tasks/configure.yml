@@ -7,6 +7,41 @@
     path: /opt/rh/rh-php71/root/bin/php
     priority: 1
 
+- name: Set upload_max_filesize
+  replace:
+    dest: /etc/opt/rh/rh-php71/php.ini
+    regexp: >
+      ^upload_max_filesize = 2M$
+    replace: "upload_max_filesize = {{ wpn_upload_max_filesize }}"
+
+- name: Set post_max_size
+  replace:
+    dest: /etc/opt/rh/rh-php71/php.ini
+    regexp: >
+      ^post_max_size = 8M$
+    replace: "post_max_size = {{ wpn_post_max_size }}"
+
+- name: Set php.ini memory_limit
+  replace:
+    dest: /etc/opt/rh/rh-php71/php.ini
+    regexp: >
+      ^memory_limit = .*$
+    replace: "memory_limit = {{ wpn_memory_limit }}"
+    
+- name: Set PHP timezone
+  replace:
+    dest: /etc/opt/rh/rh-php71/php.ini
+    regexp: >
+      ^;date.timezone =$
+    replace: "date.timezone = {{ wpn_default_timezone }}"
+
+- name: Set PHP CURLOPT_CAINFO
+  replace:
+    dest: /etc/opt/rh/rh-php71/php.ini
+    regexp: >
+      ^;curl.cainfo=$
+    replace: "curl.cainfo = /etc/pki/tls/certs/ca-bundle.crt"
+
 - name: Set SELinux exceptions for apache
   command: "setsebool -P {{ item }} on"
   with_items:
