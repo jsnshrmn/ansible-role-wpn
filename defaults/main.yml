@@ -4,20 +4,26 @@ httpd_dn_suffix: 'example.com'
 httpd_cert_path: '/etc/pki/tls/certs/'
 httpd_key_path: '/etc/pki/tls/private/'
 
-wpn_environment_name: "webdev"
+wpn_environment_name: 'webdev'
 
-mariadb_host: "localhost"
-mariadb_port: "3306"
+mariadb_host: 'localhost'
+mariadb_port: '3306'
 mariadb_root_user: 'root'
 
 # Setting secure path makes sudo work as desired
 users_secure_path: '/opt/wpn/bin:/sbin:/bin:/usr/sbin:/usr/bin'
 
 # Control of PHP session expiration
-wpn_session_cookie_lifetime: "0"
-wpn_session_gc_probability: "1"
-wpn_session_gc_divisor: "100"
-wpn_session_gc_maxlifetime: "1440"
+wpn_session_cookie_lifetime: '0'
+wpn_session_gc_probability: '1'
+wpn_session_gc_divisor: '100'
+wpn_session_gc_maxlifetime: '1440'
+
+# Additional php.ini defaults.
+wpn_upload_max_filesize: '128M'
+wpn_post_max_size: '128M'
+wpn_memory_limit: '512M'
+wpn_default_timezone: 'America/Chicago'
 
 # Target aws s3 bucket and prefix for wpn site snapshots. Should end with /
 wpn_s3_snapshot_base_dir: !!null
