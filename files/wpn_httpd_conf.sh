@@ -2,6 +2,8 @@
 ## Create Apache config for Wordpress Network
 PATH=/opt/wpn/bin:/usr/local/bin:/usr/bin:/bin:/sbin:$PATH
 
+source /opt/wpn/etc/wpn_conf.sh
+
 ## Require arguments
 if [ ! -z "$1" ]
 then
