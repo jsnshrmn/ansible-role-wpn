@@ -50,9 +50,9 @@
     group: wheel
     recurse: yes
 
-- name: Ensure /usr/share/httpd/.wp-cli exists
+- name: Ensure .wp-cli directory exists
   file:
-    path: /usr/share/httpd/.wp-cli
+    path: "{{ httpd_share_dir }}/.wp-cli"
     state: directory
     mode: 0755
     owner: apache
