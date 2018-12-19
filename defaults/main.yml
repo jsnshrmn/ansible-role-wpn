@@ -3,6 +3,7 @@
 httpd_service: 'httpd'
 httpd_log_dir: '/var/log/httpd'
 httpd_etc_dir: '/etc/httpd'
+httpd_share_dir: '/usr/share/httpd'
 
 httpd_dn_suffix: 'example.com'
 
