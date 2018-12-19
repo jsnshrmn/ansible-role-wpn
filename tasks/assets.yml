@@ -60,9 +60,9 @@
     recurse: yes
 
 - name: Install httpd template file
-  copy:
-    src: wpn_init_httpd_template
-    dest: /opt/wpn/etc/
+  template:
+    src: wpn_init_httpd_template.j2
+    dest: /opt/wpn/etc/wpn_init_httpd_template
     owner: apache
     group: wheel
     mode: 0444

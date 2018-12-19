@@ -51,14 +51,14 @@
 
 - name: Allow apache group to view httpd log files
   file:
-    path: /var/log/httpd
+    path: "{{ httpd_log_dir }}"
     owner: root
     group: apache
     mode: 0750
 - name: Add /srv config include to http.conf
   lineinfile:
     state: present
-    dest: /etc/httpd/conf/httpd.conf
+    dest: "{{ httpd_etc_dir }}/conf/httpd.conf"
     line: "IncludeOptional \"/srv/*/etc/*.conf\""
 
 - name: Ensure /etc/profile.d/wpn-ops.sh exists

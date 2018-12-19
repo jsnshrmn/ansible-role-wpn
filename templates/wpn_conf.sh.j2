@@ -4,6 +4,10 @@ PATH=/opt/wpn/bin:/usr/local/bin:/usr/bin:/bin:/sbin:$PATH
 # tag for wpn boxes
 env_name="{{ wpn_environment_name }}"
 
+# Name of the web service.
+httpd_service="{{ httpd_service }}"
+
+# Version of WordPress to install
 wpn_version="{{ wpn_version }}"
 
 {% if ((wpn_s3_snapshot_base_dir is defined) and (wpn_s3_snapshot_base_dir is not none)) %}
