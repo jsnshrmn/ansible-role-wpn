@@ -28,7 +28,21 @@
   ServerAlias *.__wpn_base_dir__.${HTTPD_DN_SUFFIX}
   DocumentRoot /srv/__wpn_base_dir__/wp
   Alias "/.well-known/acme-challenge" "/srv/__wpn_base_dir__/.well-known/acme-challenge"
-  ProxyPassMatch ^/(.*\.php.*)$ fcgi://127.0.0.1:9000/srv/__wpn_base_dir__/wp
+
+  <LocationMatch "(.*\.php.*)">
+    # Don't generate expires headers for php responses.
+    <IfModule mod_expires.c>
+      ExpiresActive Off
+    </IfModule>
+    # Cache php responses internally.
+    <IfModule mod_cache.c>
+      <IfModule mod_cache_disk.c>
+        CacheEnable disk
+      </IfModule>
+    </IfModule>
+    # Requests are serviced by fcgi server.
+    ProxyPass fcgi://127.0.0.1:9000/srv/__wpn_base_dir__/wp
+  </LocationMatch>
 
   <Directory "/srv/__wpn_base_dir__/wp>
     DirectoryIndex index.php
