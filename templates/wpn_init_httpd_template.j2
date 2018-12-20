@@ -29,7 +29,7 @@
   DocumentRoot /srv/__wpn_base_dir__/wp
   Alias "/.well-known/acme-challenge" "/srv/__wpn_base_dir__/.well-known/acme-challenge"
 
-  <LocationMatch "(.+\.php)([?&#][^?&#]+)?">
+  <LocationMatch "^(.+\.php)([?&#][^?&#]+)?$">
     # Don't generate expires headers for php responses.
     <IfModule mod_expires.c>
       ExpiresActive Off
