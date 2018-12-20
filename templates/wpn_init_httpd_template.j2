@@ -37,7 +37,9 @@
     # Cache php responses internally.
     <IfModule mod_cache.c>
       <IfModule mod_cache_disk.c>
-        CacheEnable disk
+        # mod_cache doesn't seem to be including url parameters and fragments in the cache key as expected.
+        # Leaving disabled until that's sorted out.
+        # CacheEnable disk
       </IfModule>
     </IfModule>
     # Requests are serviced by fcgi server.
