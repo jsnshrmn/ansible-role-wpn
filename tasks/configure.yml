@@ -7,6 +7,35 @@
     path: /opt/rh/rh-php71/root/bin/php
     priority: 1
 
+
+- name: Configure PHP-FPM to listen on a socket
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^listen = 127\.0\.0\.1:9000$
+    replace: "listen = /var/run/rh-php71-fpm.sock"
+
+- name: Configure PHP-FPM socket owner
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^;listen\.owner = nobody$
+    replace: "listen.owner = apache"
+
+- name: Configure PHP-FPM socket group
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^;listen\.group = nobody$
+    replace: "listen.group = apache"
+
+- name: Configure PHP-FPM socket mode
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^;listen\.mode = 0600$
+    replace: "listen.mode = 0600"
+
 - name: Set upload_max_filesize
   replace:
     dest: /etc/opt/rh/rh-php71/php.ini
@@ -55,6 +84,7 @@
     owner: root
     group: apache
     mode: 0750
+
 - name: Add /srv config include to http.conf
   lineinfile:
     state: present
