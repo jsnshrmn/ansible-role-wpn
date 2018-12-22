@@ -30,13 +30,15 @@
   Alias "/.well-known/acme-challenge" "/srv/__wpn_base_dir__/.well-known/acme-challenge"
 
   <FilesMatch "\.php$">
-    # Don't generate expires headers for php responses.
-    <IfModule mod_expires.c>
-      ExpiresActive Off
-    </IfModule>
-    # Create a pass-through to force fcgi to be handled as a reverse proxy for php files.
-    # This allows for the correct PATH_INFO to be determined by the backend in all circumstances.
-    SetHandler  "proxy:unix:/var/run/rh-php71-fpm.sock|fcgi://__wpn_base_dir__"
+    <If "-f %{REQUEST_FILENAME}">
+      # Don't generate expires headers for php responses.
+      <IfModule mod_expires.c>
+        ExpiresActive Off
+      </IfModule>
+      # Create a pass-through to force fcgi to be handled as a reverse proxy for php files.
+      # This allows for the correct PATH_INFO to be determined by the backend in all circumstances.
+      SetHandler  "proxy:unix:/var/run/rh-php71-fpm.sock|fcgi://__wpn_base_dir__"
+    </If>
   </FilesMatch>
     
   # Define a worker for the fastcgi backend.
