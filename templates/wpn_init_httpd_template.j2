@@ -42,7 +42,7 @@
   </FilesMatch>
     
   # Define a worker for the fastcgi backend.
-  <Proxy "fcgi://__wpn_base_dir__/srv/__wpn_base_dir__/wp" enablereuse=on max=10>
+  <Proxy "fcgi://__wpn_base_dir__/srv/__wpn_base_dir__/wp" flushpackets=on enablereuse=on max=10>
   </Proxy>
 
   # Cache php responses internally.
