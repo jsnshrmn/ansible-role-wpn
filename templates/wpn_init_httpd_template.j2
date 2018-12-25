@@ -1,24 +1,69 @@
 <VirtualHost *:80>
   ServerName __wpn_base_dir__.${HTTPD_DN_SUFFIX}
   ServerAlias *.__wpn_base_dir__.${HTTPD_DN_SUFFIX}
+  DocumentRoot /srv/__wpn_base_dir__/wp
+    
+  # Redirect remote clients to https for everything except acme challenges.
+  <If "%{REMOTE_ADDR} != '127.0.0.1'">
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteCond %{REQUEST_URI} !^\/\.well-known\/acme-challenge\/.+$
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+  </If>
+
+  # Configure acme challenge directory.
   Alias "/.well-known/acme-challenge" "/srv/__wpn_base_dir__/.well-known/acme-challenge"
 
-  RewriteEngine On
-  RewriteCond %{HTTPS} off
-  RewriteCond %{REQUEST_URI} !^\/\.well-known\/.*$
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+  <Directory "/srv/__wpn_base_dir__/.well-known/acme-challenge">
+     AllowOverride All
+     Order allow,deny
+     Allow from all
+     Require all granted
+  </Directory>
 
- <Directory "/srv/__wpn_base_dir__/.well-known/acme-challenge">
+  # Define a worker for the fastcgi backend.
+  <Proxy "fcgi://127.0.0.1:9000" enablereuse=on flushpackets=on max=10>
+  </Proxy>
+
+  <FilesMatch "\.php$">
+    # Don't gzip php backend.
+    SetEnv no-gzip 1
+
+    # Don't generate default expires headers for php backend.
+    <IfModule mod_expires.c>
+      ExpiresActive Off
+    </IfModule>
+
+    # Create a pass-through so fcgi is handled as a reverse proxy for php files.
+    # This allows worker configuration and for
+    # sending the correct PATH_INFO to be the backend in all circumstances.
+    <If "%{REMOTE_ADDR} == '127.0.0.1'">
+      SetHandler  "proxy:fcgi://127.0.0.1:9000"
+    </If>
+  </FilesMatch>
+
+  # We only serve cleartext on localhost.
+  <Directory "/srv/__wpn_base_dir__/wp>
+    DirectoryIndex index.php
+    Options Indexes FollowSymLinks
     AllowOverride All
-    Order allow,deny
-    Allow from all
+    Order deny,allow
+    Allow from 127.0.0.1
     Require all granted
- </Directory>
+
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteBase /
+        RewriteRule ^index\.php$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule . /index.php [L]
+    </IfModule>
+  </Directory>
 
 </VirtualHost>
 
 <VirtualHost *:443>
-
   Include {{ httpd_etc_dir }}/conf.d/00ssl.include
   SSLCertificateFile ${HTTPD_CERT_PATH}/star.${HTTPD_DN_SUFFIX}/cert.pem
   SSLCertificateKeyFile ${HTTPD_KEY_PATH}/star.${HTTPD_DN_SUFFIX}/privkey.pem
@@ -27,35 +72,29 @@
   ServerName __wpn_base_dir__.${HTTPD_DN_SUFFIX}
   ServerAlias *.__wpn_base_dir__.${HTTPD_DN_SUFFIX}
   DocumentRoot /srv/__wpn_base_dir__/wp
-  Alias "/.well-known/acme-challenge" "/srv/__wpn_base_dir__/.well-known/acme-challenge"
 
-  <FilesMatch "\.php$">
-    <If "-f %{REQUEST_FILENAME}">
-      # Don't generate expires headers for php responses.
-      <IfModule mod_expires.c>
-        ExpiresActive Off
-      </IfModule>
-      # Create a pass-through to force fcgi to be handled as a reverse proxy for php files.
-      # This allows for the correct PATH_INFO to be determined by the backend in all circumstances.
-      SetHandler  "proxy:unix:/var/run/rh-php71-fpm.sock|fcgi://__wpn_base_dir__"
-    </If>
-  </FilesMatch>
-    
-  # Define a worker for the fastcgi backend.
-  <Proxy "fcgi://__wpn_base_dir__/srv/__wpn_base_dir__/wp" flushpackets=on enablereuse=on max=10>
-  </Proxy>
+  # Proxy indexes and php requests to our cleartext backend.
+  # Proxy works on http/1.1 only, so proxy as little as possible.
+  <LocationMatch "(.*)(\.php)|(\/)$">
+    ProxyPreserveHost On
+    ProxyPass "http://__wpn_base_dir__.${HTTPD_DN_SUFFIX}"
+    ProxyPassReverse "http://__wpn_base_dir__.${HTTPD_DN_SUFFIX}"
+	
+    # Set this header so the application can check if we're using https.
+    RequestHeader set X-Forwarded-Proto "https" env=HTTPS
 
-  # Cache php responses internally.
-  <LocationMatch "^(/.+\.php)([?&#][^?&#]+)?$">
+    # Cache if possible.
     <IfModule mod_cache.c>
       <IfModule mod_cache_disk.c>
-        # mod_cache doesn't seem to be including url parameters and fragments in the cache key as expected.
-        # Leaving disabled until that's sorted out.
-        # CacheEnable disk
+        # Don't generate default expires headers on the front end.
+        ExpiresActive Off
+        CacheEnable disk
+        UnSetEnv no-cache
       </IfModule>
     </IfModule>
   </LocationMatch>
 
+  # Serve static assets directly.
   <Directory "/srv/__wpn_base_dir__/wp>
     DirectoryIndex index.php
     Options Indexes FollowSymLinks
@@ -72,14 +111,6 @@
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteRule . /index.php [L]
     </IfModule>
-
-  </Directory>
-
-  <Directory "/srv/__wpn_base_dir__/.well-known/acme-challenge">
-    AllowOverride All
-    Order allow,deny
-    Allow from all
-    Require all granted
   </Directory>
 
 </VirtualHost>
