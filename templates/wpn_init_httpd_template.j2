@@ -24,7 +24,7 @@
   # Define a worker for the fastcgi backend.
   # We keep the maximum connection number relatively low since it is
   # a multiple of the number of event workers.
-  <Proxy "fcgi://127.0.0.1:9000" enablereuse=on flushpackets=on max=5>
+  <Proxy "fcgi://127.0.0.1:9000" flushpackets=on keepalive=on enablereuse=on max=5>
   </Proxy>
 
   <FilesMatch "\.php$">
