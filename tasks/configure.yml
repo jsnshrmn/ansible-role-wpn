@@ -42,6 +42,34 @@
       ^;curl.cainfo=$
     replace: "curl.cainfo = /etc/pki/tls/certs/ca-bundle.crt"
 
+- name: Configure PHP-FPM max_children
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^pm\.max_children = 50$
+    replace: "pm.max_children = 256"
+
+- name: Configure PHP-FPM pm.start_servers
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^pm\.start_servers = 5$
+    replace: "pm.start_servers = 180"
+
+- name: Configure PHP-FPM pm.min_spare_servers
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^pm\.min_spare_servers = 5$
+    replace: "pm.min_spare_servers = 32"
+
+- name: Configure PHP-FPM pm.max_spare_servers
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^pm\.max_spare_servers = 35$
+    replace: "pm.max_spare_servers = 196"
+
 - name: Set SELinux exceptions for apache
   command: "setsebool -P {{ item }} on"
   with_items:
