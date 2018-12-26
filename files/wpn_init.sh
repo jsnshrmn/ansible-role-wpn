@@ -64,8 +64,16 @@ sudo -u apache chmod 775 "$sitepath"
 ## Download wpn core
 sudo -u apache wp core download --path="${sitepath}/wp" --locale=en_US --version="${wpn_version}" || exit 1;
 
-## Create the config file
-sudo -u apache wp config create --path="${sitepath}/wp" --dbhost=${my_dbhost}:${my_dbport} --dbuser=${my_dbsu} --dbpass=${my_dbsu_pass} --dbname=wpn_${site}_${env_name} --locale=en_US || exit 1;
+# Extra PHP code for wp-config.php
+read -r -d '' WPCONFIGPHP <<- EOF
+// add lb support to wp-config https scheme.
+if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']))
+  if (strpos(\$_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
+    \$_SERVER['HTTPS']='on';
+EOF
+
+## Create wp-config.php
+sudo -u apache echo "${WPCONFIGPHP}" | sudo -u apache wp config create --path="${sitepath}/wp" --dbhost=${my_dbhost}:${my_dbport} --dbuser=${my_dbsu} --dbpass=${my_dbsu_pass} --dbname=wpn_${site}_${env_name} --locale=en_US --extra-php || exit 1;
 
 ## Create the database
 echo "Creating empty database."
