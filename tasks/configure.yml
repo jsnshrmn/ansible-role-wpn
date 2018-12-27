@@ -42,6 +42,27 @@
       ^;curl.cainfo=$
     replace: "curl.cainfo = /etc/pki/tls/certs/ca-bundle.crt"
 
+- name: Configure PHP-FPM global emergency_restart_threshold
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.conf
+    regexp: >
+      ^;emergency_restart_threshold = 0$
+    replace: "emergency_restart_threshold = 2"
+
+- name: Configure PHP-FPM global emergency_restart_interval
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.conf
+    regexp: >
+      ^;emergency_restart_interval = 0$
+    replace: "emergency_restart_interval = 1m"
+
+- name: Configure PHP-FPM global process_control_timeout
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.conf
+    regexp: >
+      ^;process_control_timeout = 0$
+    replace: "process_control_timeout = 10s"
+
 - name: Configure PHP-FPM process manager for ondemand processes
   replace:
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
@@ -68,7 +89,7 @@
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
     regexp: >
       ^;pm\.max_requests = 500$
-    replace: "pm.max_requests = 5"
+    replace: "pm.max_requests = 25"
 
 - name: Configure PHP-FPM slow log
   replace:
