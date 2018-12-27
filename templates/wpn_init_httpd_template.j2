@@ -28,6 +28,9 @@
   </Proxy>
 
   <FilesMatch "\.php$">
+    # Pass authorization headers to fcgi.
+    CGIPassAuth on
+    
     # Don't gzip php backend.
     SetEnv no-gzip 1
 
