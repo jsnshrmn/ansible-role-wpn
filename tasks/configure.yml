@@ -89,14 +89,14 @@
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
     regexp: >
       ^;request_slowlog_timeout = 0$
-    replace: "request_slowlog_timeout = 5s"
+    replace: "request_slowlog_timeout = 300s"
 
 - name: Configure PHP-FPM request_terminate_timeout
   replace:
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
     regexp: >
       ^;request_terminate_timeout = 0$
-    replace: "request_terminate_timeout = 300"
+    replace: "request_terminate_timeout = 360"
 
 - name: Set SELinux exceptions for apache
   command: "setsebool -P {{ item }} on"
