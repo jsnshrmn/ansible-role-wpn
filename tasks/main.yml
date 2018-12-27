@@ -1,6 +1,11 @@
 ---
+
 - include: yum.yml
   become: true
+
+- include: selinux.yml
+  become: true
+  tags: selinux
 
 - include: configure.yml
   become: true
