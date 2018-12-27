@@ -84,13 +84,6 @@
       ^;pm\.process_idle_timeout = 10s;$
     replace: "pm.process_idle_timeout = 10s"
 
-- name: Configure PHP-FPM pm.max_requests
-  replace:
-    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
-    regexp: >
-      ^;pm\.max_requests = 500$
-    replace: "pm.max_requests = 25"
-
 - name: Configure PHP-FPM slow log
   replace:
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
