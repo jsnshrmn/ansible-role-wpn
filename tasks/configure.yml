@@ -42,6 +42,13 @@
       ^;curl.cainfo=$
     replace: "curl.cainfo = /etc/pki/tls/certs/ca-bundle.crt"
 
+- name: Configure PHP-FPM process manager for ondemand processes
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^pm = dynamic$
+    replace: "pm = ondemand"
+
 - name: Configure PHP-FPM max_children
   replace:
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
@@ -49,26 +56,19 @@
       ^pm\.max_children = 50$
     replace: "pm.max_children = 256"
 
-- name: Configure PHP-FPM pm.start_servers
+- name: Configure PHP-FPM pm.process_idle_timeout
   replace:
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
     regexp: >
-      ^pm\.start_servers = 5$
-    replace: "pm.start_servers = 180"
+      ^;pm\.process_idle_timeout = 10s;$
+    replace: "pm.process_idle_timeout = 10s"
 
-- name: Configure PHP-FPM pm.min_spare_servers
+- name: Configure PHP-FPM pm.max_requests
   replace:
     dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
     regexp: >
-      ^pm\.min_spare_servers = 5$
-    replace: "pm.min_spare_servers = 32"
-
-- name: Configure PHP-FPM pm.max_spare_servers
-  replace:
-    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
-    regexp: >
-      ^pm\.max_spare_servers = 35$
-    replace: "pm.max_spare_servers = 196"
+      ^;pm\.max_requests = 500$
+    replace: "pm.max_requests = 5"
 
 - name: Configure PHP-FPM slow log
   replace:
@@ -76,6 +76,13 @@
     regexp: >
       ^;request_slowlog_timeout = 0$
     replace: "request_slowlog_timeout = 5s"
+
+- name: Configure PHP-FPM request_terminate_timeout
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^;request_terminate_timeout = 0$
+    replace: "request_terminate_timeout = 300"
 
 - name: Configure PHP-FPM opcache.file_cache
   replace:
