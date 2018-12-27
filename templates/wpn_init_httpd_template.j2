@@ -75,6 +75,12 @@
   ServerAlias *.__wpn_base_dir__.${HTTPD_DN_SUFFIX}
   DocumentRoot /srv/__wpn_base_dir__/wp
 
+  # Deny direct access to php files.
+  <FilesMatch "\.php$">
+    order allow,deny
+    deny from all
+  </FilesMatch>
+
   # Proxy indexes and php requests to our cleartext backend.
   # Proxy works on http/1.1 only, so proxy as little as possible.
   <LocationMatch "(.*)(\.php)|(\/)$">
