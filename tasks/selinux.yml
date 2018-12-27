@@ -1,0 +1,35 @@
+---
+
+- name: Copy SELinux type enforcement
+  copy:
+    src: php_fpm_ptrace.te
+    dest: /tmp/
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Remove SELinux policy package
+  command: >
+    semodule -r php_fpm_ptrace
+  failed_when: false
+
+- name: Compile SELinux module file
+  command: >
+    checkmodule -M -m -o /tmp/php_fpm_ptrace.mod /tmp/php_fpm_ptrace.te
+
+- name: Build SELinux policy package
+  command: >
+    semodule_package -o /tmp/php_fpm_ptrace.pp -m /tmp/php_fpm_ptrace.mod
+
+- name: Install local selinux policy package for php-fpm.
+  command: >
+    semodule -i /tmp/php_fpm_ptrace.pp
+
+- name: Remove temporary files
+  file:
+    path: "/tmp/{{ item }}"
+    state: absent
+  with_items:
+    - php_fpm_ptrace.te
+    - php_fpm_ptrace.mod
+    - php_fpm_ptrace.pp
