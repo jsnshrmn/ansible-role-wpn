@@ -77,6 +77,13 @@
       ^;request_slowlog_timeout = 0$
     replace: "request_slowlog_timeout = 5s"
 
+- name: Configure PHP-FPM opcache.file_cache
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^;php_value\[opcache\.file_cache\]  = \/var\/opt\/rh\/rh-php71\/lib\/php\/opcache$
+    replace: "php_value[opcache.file_cache]  = /var/opt/rh/rh-php71/lib/php/opcache"
+
 - name: Set SELinux exceptions for apache
   command: "setsebool -P {{ item }} on"
   with_items:
