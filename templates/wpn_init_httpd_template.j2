@@ -85,8 +85,8 @@
   # Proxy works on http/1.1 only, so proxy as little as possible.
   <LocationMatch "(.*)(\.php)|(\/)$">
     ProxyPreserveHost On
-    ProxyPass "http://__wpn_base_dir__.${HTTPD_DN_SUFFIX}"
-    ProxyPassReverse "http://__wpn_base_dir__.${HTTPD_DN_SUFFIX}"
+    ProxyPass "http://127.0.0.1"
+    ProxyPassReverse "http://127.0.0.1"
 	
     # Set this header so the application can check if we're using https.
     RequestHeader set X-Forwarded-Proto "https" env=HTTPS
