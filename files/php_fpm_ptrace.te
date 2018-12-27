@@ -1,0 +1,12 @@
+
+module php_fpm_ptrace 1.0;
+
+require {
+	type httpd_t;
+        class capability sys_ptrace;
+	class process ptrace;
+}
+
+#============= httpd_t ==============
+allow httpd_t self:capability sys_ptrace;
+allow httpd_t self:process ptrace;
