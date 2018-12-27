@@ -70,6 +70,13 @@
       ^pm\.max_spare_servers = 35$
     replace: "pm.max_spare_servers = 196"
 
+- name: Configure PHP-FPM slow log
+  replace:
+    dest: /etc/opt/rh/rh-php71/php-fpm.d/www.conf
+    regexp: >
+      ^;request_slowlog_timeout = 0$
+    replace: "request_slowlog_timeout = 5s"
+
 - name: Set SELinux exceptions for apache
   command: "setsebool -P {{ item }} on"
   with_items:
