@@ -42,9 +42,7 @@
     # Create a pass-through so fcgi is handled as a reverse proxy for php files.
     # This allows worker configuration and for
     # sending the correct PATH_INFO to be the backend in all circumstances.
-    <If "%{REMOTE_ADDR} == '127.0.0.1'">
-      SetHandler  "proxy:fcgi://127.0.0.1:9000"
-    </If>
+    SetHandler  "proxy:fcgi://127.0.0.1:9000"
   </FilesMatch>
 
   # We only serve cleartext on localhost.
