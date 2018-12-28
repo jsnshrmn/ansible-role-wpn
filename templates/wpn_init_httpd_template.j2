@@ -46,7 +46,7 @@
   </FilesMatch>
 
   # We only serve cleartext on localhost.
-  <Directory "/srv/__wpn_base_dir__/wp>
+  <Directory "/srv/__wpn_base_dir__/wp">
     DirectoryIndex index.php
     Options Indexes FollowSymLinks
     AllowOverride All
@@ -104,7 +104,7 @@
   </LocationMatch>
 
   # Serve static assets directly.
-  <Directory "/srv/__wpn_base_dir__/wp>
+  <Directory "/srv/__wpn_base_dir__/wp">
     DirectoryIndex index.php
     Options Indexes FollowSymLinks
     AllowOverride All
