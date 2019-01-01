@@ -66,10 +66,22 @@ sudo -u apache wp core download --path="${sitepath}/wp" --locale=en_US --version
 
 # Extra PHP code for wp-config.php
 read -r -d '' WPCONFIGPHP <<- EOF
-// add lb support to wp-config https scheme.
-if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']))
-  if (strpos(\$_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
-    \$_SERVER['HTTPS']='on';
+// Rewrite protocol and remote host variables based on headers from loopback proxy.
+if (
+  // Are proxy headers are set?
+  isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && isset(\$_SERVER['HTTP_X_FORWARDED_FOR'][0])
+) {
+  if (
+    // Are the values consistent with a loopback proxy with TLS termination?
+    strpos(\$_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false &&
+    \$_SERVER['HTTP_X_FORWARDED_FOR'] !== '127.0.0.1' &&
+    \$_SERVER['REMOTE_ADDR'] === '127.0.0.1'
+  ) {
+    // Then use the remote address and protocol from the proxy.
+    \$_SERVER['HTTPS'] = 'on';
+    \$_SERVER['REMOTE_ADDR'] = \$_SERVER['HTTP_X_FORWARDED_FOR'];
+  }
+}
 EOF
 
 ## Create wp-config.php
