@@ -14,6 +14,7 @@
   with_items:
     - rh-php71-php
     - rh-php71-php-fpm
+    - rh-php71-php-gd
     - rh-php71-php-mbstring
     - rh-php71-php-mysqlnd
     - rh-php71-php-opcache
